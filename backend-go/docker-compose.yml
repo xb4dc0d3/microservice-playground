@@ -1,0 +1,25 @@
+services:
+  backend-node:
+    build:
+      context: ../backend-node
+      dockerfile: Dockerfile
+    container_name: backend-node
+    ports:
+      - "3000:3000"
+
+  backend-go:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-go
+    environment:
+      - BACKEND_NODE_URL=http://backend-node:3000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend-node
+
+networks:
+  default:
+    external:
+      name: ci-cd

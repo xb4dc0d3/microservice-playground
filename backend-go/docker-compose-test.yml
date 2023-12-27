@@ -1,0 +1,25 @@
+services:
+  backend-node:
+    image: node:16.20-slim
+    working_dir: /app
+    entrypoint: bash
+    command: -c "npm install && npm start"
+    volumes:
+      - ../backend-node:/app
+
+  backend-go-test:
+    image: golang:1.21.1-alpine
+    working_dir: /app
+    entrypoint: sh
+    command: -c "go mod download && go test -v"
+    environment:
+      - BACKEND_NODE_URL=http://backend-node:3000
+    volumes:
+      - ./:/app
+    depends_on:
+      - backend-node
+
+networks:
+  default:
+    external:
+      name: ci-cd

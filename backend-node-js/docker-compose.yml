@@ -1,0 +1,9 @@
+services:
+  backend-node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend-node
+    working_dir: /app
+    ports:
+      - "3000:3000"

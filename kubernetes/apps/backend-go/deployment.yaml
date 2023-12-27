@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-backend
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      name: go-backend
+  template:
+    metadata:
+      labels:
+        name: go-backend
+    spec:
+      containers:
+        - name: backend
+          image: docker.io/nginx:alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              cpu: 50m
+              memory: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-service
+  namespace: demo
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 5000
+  selector:
+    name: go-backend
