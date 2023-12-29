@@ -1,0 +1,52 @@
+name: CD Go
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/*go.yml'
+      - 'backend-go/**'
+  workflow_dispatch:
+
+env:
+  KUBERNETES_NAMESPACE: dev
+  APPLICATION: backend-go
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Test
+        run: docker network create ci-cd && make test-${{ env.APPLICATION }}
+      
+      - name: Build
+        run: |
+          cd ${{ env.APPLICATION }} && \
+          docker build -t latest -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }} .
+
+      - name: Push Images
+        run: |
+          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+          docker push -a ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}
+
+      - name: Set Kubeconfig
+        uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBECONFIG }}
+          kubectl-version: v1.27.4
+      
+      - name: Deploy
+        run: |
+          echo ${{ github.sha }} >> .env
+          echo ${{ secrets.CONTAINER_REGISTRY }} >> .env
+          source .env
+          envsubst < kubernetes/apps/${{ env.APPLICATION }}/deployment.yaml | kubectl apply -f  -
+        
+      - name: Verify deployment
+        run: kubectl rollout status deployment/${{ env.APPLICATION }} -n ${{ env.KUBERNETES_NAMESPACE }}

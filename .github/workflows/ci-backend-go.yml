@@ -1,0 +1,37 @@
+name: CI Go
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/*go.yml'
+      - 'backend-go/**'
+
+env:
+  APPLICATION: backend-go
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Test
+        run: docker network create ci-cd && make test-${{ env.APPLICATION }}
+      
+      - name: Build
+        run: |
+          cd ${{ env.APPLICATION }} && \
+          docker build -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }} .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
