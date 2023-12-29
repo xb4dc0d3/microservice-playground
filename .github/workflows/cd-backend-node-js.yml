@@ -1,7 +1,9 @@
 name: CD Node js
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
     paths:
       - '.github/workflows/*node-js.yml'
       - 'backend-node-js/**'
@@ -11,7 +13,7 @@ env:
   APPLICATION: backend-node-js
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
