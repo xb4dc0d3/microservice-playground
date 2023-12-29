@@ -1,11 +1,11 @@
 services:
-  backend-node:
+  backend-node-js:
     image: node:16.20-slim
     working_dir: /app
     entrypoint: bash
     command: -c "npm install && npm start"
     volumes:
-      - ../backend-node:/app
+      - ../backend-node-js:/app
 
   backend-go-test:
     image: golang:1.21.1-alpine
@@ -13,11 +13,11 @@ services:
     entrypoint: sh
     command: -c "go mod download && go test -v"
     environment:
-      - BACKEND_NODE_URL=http://backend-node:3000
+      - BACKEND_NODE_URL=http://backend-node-js:3000
     volumes:
       - ./:/app
     depends_on:
-      - backend-node
+      - backend-node-js
 
 networks:
   default:

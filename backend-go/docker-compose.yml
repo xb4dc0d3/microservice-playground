@@ -1,9 +1,9 @@
 services:
-  backend-node:
+  backend-node-js:
     build:
-      context: ../backend-node
+      context: ../backend-node-js
       dockerfile: Dockerfile
-    container_name: backend-node
+    container_name: backend-node-js
     ports:
       - "3000:3000"
 
@@ -13,11 +13,11 @@ services:
       dockerfile: Dockerfile
     container_name: backend-go
     environment:
-      - BACKEND_NODE_URL=http://backend-node:3000
+      - BACKEND_NODE_URL=http://backend-node-js:3000
     ports:
       - "5000:5000"
     depends_on:
-      - backend-node
+      - backend-node-js
 
 networks:
   default:

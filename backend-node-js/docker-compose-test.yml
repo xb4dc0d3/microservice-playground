@@ -1,5 +1,5 @@
 services:
-  backend-node-test:
+  backend-node-js-test:
     image: node:16.20-slim
     working_dir: /app
     entrypoint: bash

@@ -1,42 +1,41 @@
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: node-js-backend
-  namespace: demo
-spec:
-  selector:
-    matchLabels:
-      name: node-js-backend
-  template:
-    metadata:
-      labels:
-        name: node-js-backend
-    spec:
-      containers:
-        - name: backend
-          image: docker.io/nginx:alpine
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 80
-          resources:
-            requests:
-              cpu: 50m
-              memory: 50Mi
-            limits:
-              cpu: 50m
-              memory: 100Mi
----
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-js-service
+  name: service-node-js
   namespace: demo
 spec:
   ports:
     - name: http
       port: 80
       protocol: TCP
-      targetPort: 80
+      targetPort: 3000
   selector:
-    name: node-js-backend
+    name: backend-node-js
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-node-js
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      name: backend-node-js
+  template:
+    metadata:
+      labels:
+        name: backend-node-js
+    spec:
+      containers:
+        - name: backend
+          image: docker.io/nuga99/backend-node-js
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              cpu: 50m
+              memory: 50Mi

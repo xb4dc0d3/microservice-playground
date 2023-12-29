@@ -1,9 +1,9 @@
 services:
-  backend-node:
+  backend-node-js:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend-node
+    container_name: backend-node-js
     working_dir: /app
     ports:
       - "3000:3000"

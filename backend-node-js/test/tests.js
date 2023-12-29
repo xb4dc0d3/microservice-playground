@@ -2,6 +2,15 @@
 const request = require('supertest');
 const app = require('../server'); // Import the Node.js app
 
+describe('Healthcheck Endpoint', () => {
+  it('should return healthcheck string', function (done){
+      request(app)
+      .get('/healthz')
+      .expect("The Node.js service is healthy")
+      .end(done);
+  });
+});
+
 describe('Arithmetic Operations', () => {
   it('should add two numbers', function (done){
       request(app)

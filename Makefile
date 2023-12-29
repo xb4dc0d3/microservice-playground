@@ -1,12 +1,11 @@
-.PHONY: test-backend-go test-backend-node 
-
 docker-compose-test-file = "docker-compose-test.yml"
+kubernetes-app-path = "kubernetes/apps"
 
-start-backend-node-local:
-	cd backend-node && docker compose up -d
+start-backend-node-js-local:
+	cd backend-node-js && docker compose up -d
 
-stop-backend-node-local:
-	cd backend-node && docker compose down
+stop-backend-node-js-local:
+	cd backend-node-js && docker compose down
 
 start-backend-go-local:
 	cd backend-go && docker compose up -d
@@ -14,8 +13,17 @@ start-backend-go-local:
 stop-backend-go-local:
 	cd backend-go && docker compose down
 
-test-backend-node:
-	cd backend-node && docker compose --file=$(docker-compose-test-file) run --rm backend-node-test
+test-backend-node-js:
+	cd backend-node-js && docker compose --file=$(docker-compose-test-file) run --rm backend-node-js-test
 
 test-backend-go:
 	cd backend-go && docker compose --file=$(docker-compose-test-file) run --rm backend-go-test
+
+deploy-backend-go:
+	kubectl apply -f$(kubernetes-app-path)/$(app)
+
+deploy-backend-node-js:
+	kubectl apply -f $(kubernetes-app-path)/$(app)
+
+verify-deployment:
+	kubectl rollout status deployment/$(app) -n $(namespace)

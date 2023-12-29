@@ -1,36 +1,7 @@
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: go-backend
-  namespace: demo
-spec:
-  selector:
-    matchLabels:
-      name: go-backend
-  template:
-    metadata:
-      labels:
-        name: go-backend
-    spec:
-      containers:
-        - name: backend
-          image: docker.io/nginx:alpine
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 5000
-          resources:
-            requests:
-              cpu: 50m
-              memory: 50Mi
-            limits:
-              cpu: 50m
-              memory: 100Mi
----
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-service
+  name: service-go
   namespace: demo
 spec:
   ports:
@@ -39,4 +10,43 @@ spec:
       protocol: TCP
       targetPort: 5000
   selector:
-    name: go-backend
+    name: backend-go
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-node-js
+  namespace: demo
+data:
+  BACKEND_NODE_URL: http://service-node-js.demo.cluster.local:3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-go
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      name: backend-go
+  template:
+    metadata:
+      labels:
+        name: backend-go
+    spec:
+      containers:
+        - name: backend
+          image: docker.io/nuga99/backend-go
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: configmap-node-js
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              cpu: 50m
+              memory: 50Mi
+            limits:
+              cpu: 50m
+              memory: 50Mi
