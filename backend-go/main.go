@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,6 +22,8 @@ func main() {
 
 	// Routes
 	e.GET("/healthz", healthcheck)
+
+	e.GET("/version", version)
 
 	e.POST("/call-node-backend/add", func(c echo.Context) error {
 		return makeRequest(c, "add")
@@ -42,9 +45,13 @@ func main() {
 	e.Logger.Fatal(e.Start(":5000"))
 }
 
-// Handler
 func healthcheck(c echo.Context) error {
 	return c.String(http.StatusOK, "The go service is healthy")
+}
+
+func version(c echo.Context) error {
+	version := exec.Command("git", "rev-parse", "HEAD").String()
+	return c.String(http.StatusOK, version)
 }
 
 // Function to make HTTP requests to the Node.js backend

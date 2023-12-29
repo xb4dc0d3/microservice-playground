@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: service-node-js
-  namespace: demo
+  namespace: dev
 spec:
   ports:
     - name: http
@@ -16,7 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-node-js
-  namespace: demo
+  namespace: dev
 spec:
   selector:
     matchLabels:
@@ -39,3 +39,23 @@ spec:
             limits:
               cpu: 50m
               memory: 50Mi
+          readinessProbe:
+            exec:
+              command:
+                - "curl"
+                - "-f"
+                - "http://localhost:3000/healhtz" 
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 5
+          livenessProbe:
+            exec:
+              command:
+                - "curl"
+                - "-f"
+                - "http://localhost:3000/healhtz" 
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 5

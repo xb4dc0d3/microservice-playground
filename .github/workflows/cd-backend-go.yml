@@ -28,12 +28,13 @@ jobs:
       - name: Build
         run: |
           cd ${{ env.APPLICATION }} && \
-          docker build -t latest -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }} .
+          docker build -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }} -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }} .
 
       - name: Push Images
         run: |
-          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
           docker push -a ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}
+
 
       - name: Set Kubeconfig
         uses: tale/kubectl-action@v1
@@ -43,9 +44,9 @@ jobs:
       
       - name: Deploy
         run: |
-          echo ${{ github.sha }} >> .env
-          echo ${{ secrets.CONTAINER_REGISTRY }} >> .env
-          source .env
+          sudo apt-get install gettext-base -y
+          export VERSION=${{ github.sha }}
+          export CONTAINER_REGISTRY=${{ secrets.CONTAINER_REGISTRY }}
           envsubst < kubernetes/apps/${{ env.APPLICATION }}/deployment.yaml | kubectl apply -f  -
         
       - name: Verify deployment

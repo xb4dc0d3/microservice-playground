@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
- name: issuer-demo
+ name: issuer-dev
  namespace: cert-manager
 spec:
  acme:
@@ -11,7 +11,7 @@ spec:
    email: kitasan-black@k8s.com
    # Name of a secret used to store the ACME account private key
    privateKeySecretRef:
-     name: letsencrypt-demo
+     name: letsencrypt-dev
    # Enable the HTTP-01 challenge provider
    solvers:
    - http01:

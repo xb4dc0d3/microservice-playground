@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: service-go
-  namespace: demo
+  namespace: dev
 spec:
   ports:
     - name: http
@@ -16,15 +16,15 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: configmap-node-js
-  namespace: demo
+  namespace: dev
 data:
-  BACKEND_NODE_URL: http://service-node-js.demo.cluster.local:3000
+  BACKEND_NODE_URL: http://service-node-js.dev.cluster.local:3000
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-go
-  namespace: demo
+  namespace: dev
 spec:
   selector:
     matchLabels:
@@ -50,3 +50,23 @@ spec:
             limits:
               cpu: 50m
               memory: 50Mi
+          readinessProbe:
+            exec:
+              command:
+                - "curl"
+                - "-f"
+                - "http://localhost:5000/healhtz" 
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 5
+          livenessProbe:
+            exec:
+              command:
+                - "curl"
+                - "-f"
+                - "http://localhost:5000/healhtz" 
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 5

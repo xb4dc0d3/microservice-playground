@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-go
-  namespace: demo
+  namespace: dev
 spec:
   rules:
   - host: go.bonestealer.xyz

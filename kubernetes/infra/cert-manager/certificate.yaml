@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: star-bonestealer-xyz
-  namespace: demo
+  namespace: dev
 spec:
   secretName: ingress-cert
   renewBefore: 504h0m0s
@@ -11,5 +11,5 @@ spec:
   dnsNames:
     - '*.bonestealer.xyz'
   issuerRef:
-    name: issuer-demo
+    name: issuer-dev
     kind: ClusterIssuer

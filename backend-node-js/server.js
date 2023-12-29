@@ -12,6 +12,15 @@ function performOperation(req, res, operationFn) {
   res.json({ result });
 }
 
+// Version endpoint
+app.get('/version', (req, res) => {
+  revision = require('child_process')
+  .execSync('git rev-parse HEAD')
+  .toString().trim()
+  res.send("app_version: "+ revision)
+})
+
+// Healthcheck endpoint
 app.get('/healthz', (req, res) => {
   const message = "The Node.js service is healthy";
   res.send(message);
