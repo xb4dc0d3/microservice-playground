@@ -18,12 +18,3 @@ test-backend-node-js:
 
 test-backend-go:
 	cd backend-go && docker compose --file=$(docker-compose-test-file) run --rm backend-go-test
-
-deploy-backend-go:
-	kubectl apply -f$(kubernetes-app-path)/$(app)
-
-deploy-backend-node-js:
-	kubectl apply -f $(kubernetes-app-path)/$(app)
-
-verify-deployment:
-	kubectl rollout status deployment/$(app) -n $(namespace)

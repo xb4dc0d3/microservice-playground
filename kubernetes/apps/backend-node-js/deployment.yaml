@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: docker.io/nuga99/backend-node-js
+          image: $CONTAINER_REGISTRY/backend-node-js:$VERSION
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
