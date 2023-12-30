@@ -22,7 +22,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Test
+      - name: Build and Test
         run: docker network create ci-cd && make test-${{ env.APPLICATION }}
       
       - name: Build Images
@@ -49,5 +49,5 @@ jobs:
           envsubst < kubernetes/apps/${{ env.APPLICATION }}/deployment.yaml | kubectl apply -f  -
           kubectl apply -f  kubernetes/apps/${{ env.APPLICATION }}/ingress.yaml
         
-      - name: Verify deployment
+      - name: Verify Deployment
         run: kubectl rollout status deployment/${{ env.APPLICATION }} -n ${{ env.KUBERNETES_NAMESPACE }}

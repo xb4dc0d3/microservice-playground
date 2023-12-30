@@ -18,7 +18,7 @@ metadata:
   name: configmap-node-go
   namespace: dev
 data:
-  BACKEND_NODE_URL: http://service-node-js.dev.cluster.local:3000
+  BACKEND_NODE_URL: https://node-js.bonestealer.xyz
 ---
 apiVersion: apps/v1
 kind: Deployment

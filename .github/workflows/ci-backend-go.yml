@@ -18,10 +18,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Test
+      - name: Build and Test
         run: docker network create ci-cd && make test-${{ env.APPLICATION }}
       
-      - name: Build
+      - name: Build Images
         run: |
           cd ${{ env.APPLICATION }} && \
           docker build -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }} .

@@ -1,11 +1,41 @@
 # Microservice-Playground
 Microservice Playground
 
-## Explanation
+### CI/CD
+Our CI/CD pipeline is strategically divided into two distinct workflows:
+
+1. Continuous Integration (CI):
+    - Triggered when there are `pull requests` and when changes occur in the `backend-go/**` and `backend-node-js/**` application code.
+    - Flows:
+      ```mermaid
+      graph LR;
+      PullRequests --> Trigger-Github-Workflow
+      Trigger-Github-Workflow --> Build
+      Build --> Test
+      Test --> Build-Images
+      Build-Images --> Image-Scan-Trivy
+      ```
+  
+2. Continuous Deployment (CD):
+    - Triggered by `push only` and when changes occur in the `backend-go/**` and `backend-node-js/**` application code.
+    - Employs `workflow_dispatch:` for manual run workflow via the GitHub UI
+    - Flows:
+      ```mermaid
+      graph LR;
+      Push --> Trigger-Github-Workflow
+      Trigger-Github-Workflow --> Build
+      Build --> Test
+      Test --> Build-Images
+      Build-Images --> Push-Images
+      Push-Images --> Deploy-Apps
+      Deploy-Apps --> Verify-Deployment
+      ```
 
 ### Infrastructure
-- 
-
+1. Infra Manifests
+   - Setup `NGINX Ingress Controller` to expose the service to public, refer to the provided manifests [here](kubernetes/infra/ingress-nginx)
+2. Apps Manifests
+   - Setup Ingress and Deployment for `backend-go` and `backend-node-js`, refer to the provided manifests [here](kubernetes/apps)
 
 ### Application
 
