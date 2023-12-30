@@ -28,7 +28,7 @@ jobs:
       - name: Build Images
         run: |
           cd ${{ env.APPLICATION }} && \
-          docker build -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }} -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }} .
+          docker build --build-arg GIT_SHA=${{ github.sha }} -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }} -t ${{ secrets.CONTAINER_REGISTRY }}/${{ env.APPLICATION }}:${{ github.sha }} .
         
       - name: Push Images
         run: |
