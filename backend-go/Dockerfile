@@ -1,7 +1,7 @@
 # Stage 1
 FROM golang:1.21.1-alpine AS builder
 
-ENV GO111MODULE=on
+ARG GIT_SHA
 
 WORKDIR /app
 
@@ -11,12 +11,10 @@ RUN go mod download
 
 COPY *.go /app
 
-RUN CGO_ENABLED=0 go build -o /app/go-app
+RUN CGO_ENABLED=0 go build -ldflags "-X main.sha=${GIT_SHA}" -o /app/go-app
 
 # Stage 2
 FROM alpine:3.19
-
-WORKDIR / 
 
 COPY --from=builder /app .
 

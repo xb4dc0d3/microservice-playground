@@ -42,12 +42,13 @@ jobs:
           base64-kube-config: ${{ secrets.KUBECONFIG }}
           kubectl-version: v1.27.4
       
-      - name: Deploy
+      - name: Deploy Apps
         run: |
           sudo apt-get install gettext-base -y
           export VERSION=${{ github.sha }}
           export CONTAINER_REGISTRY=${{ secrets.CONTAINER_REGISTRY }}
           envsubst < kubernetes/apps/${{ env.APPLICATION }}/deployment.yaml | kubectl apply -f  -
+          kubectl apply -f  kubernetes/apps/${{ env.APPLICATION }}/ingress.yaml
         
       - name: Verify deployment
         run: kubectl rollout status deployment/${{ env.APPLICATION }} -n ${{ env.KUBERNETES_NAMESPACE }}

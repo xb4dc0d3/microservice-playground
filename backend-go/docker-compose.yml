@@ -10,7 +10,7 @@ services:
   backend-go:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile 
     container_name: backend-go
     environment:
       - BACKEND_NODE_URL=http://backend-node-js:3000

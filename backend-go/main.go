@@ -7,10 +7,12 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
 
 	"github.com/labstack/echo/v4"
 )
+
+// get sha from -ldflags
+var sha string
 
 func main() {
 	e := echo.New()
@@ -50,7 +52,7 @@ func healthcheck(c echo.Context) error {
 }
 
 func version(c echo.Context) error {
-	version := exec.Command("git", "rev-parse", "HEAD").String()
+	version := fmt.Sprintf("app_sha: %s", sha)
 	return c.String(http.StatusOK, version)
 }
 

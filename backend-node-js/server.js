@@ -14,10 +14,8 @@ function performOperation(req, res, operationFn) {
 
 // Version endpoint
 app.get('/version', (req, res) => {
-  revision = require('child_process')
-  .execSync('git rev-parse HEAD')
-  .toString().trim()
-  res.send("app_version: "+ revision)
+  var sha = process.env.GIT_SHA
+  res.send("app_sha: "+ sha)
 })
 
 // Healthcheck endpoint
