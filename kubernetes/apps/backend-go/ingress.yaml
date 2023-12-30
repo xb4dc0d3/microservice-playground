@@ -4,6 +4,10 @@ metadata:
   name: ingress-go
   namespace: dev
 spec:
+  tls:
+  - hosts:
+    - go.bonestealer.xyz
+    secretName: star-bonestealer-xyz-letsencrypt
   rules:
   - host: go.bonestealer.xyz
     http:
@@ -14,4 +18,4 @@ spec:
             service:
               name: service-go
               port:
-                number: 5000
+                number: 80

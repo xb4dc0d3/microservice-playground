@@ -4,6 +4,10 @@ metadata:
   name: ingress-node-js
   namespace: dev
 spec:
+  tls:
+  - hosts:
+    - node-js.bonestealer.xyz
+    secretName: star-bonestealer-xyz-letsencrypt
   rules:
   - host: node-js.bonestealer.xyz
     http:
@@ -14,4 +18,4 @@ spec:
             service:
               name: service-node-js
               port:
-                number: 3000
+                number: 80
