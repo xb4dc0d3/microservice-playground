@@ -41,6 +41,7 @@ Our CI/CD pipeline is strategically divided into two distinct workflows:
 ### Application
 
 #### Backend Node js
+##### Endpoints
 1. Endpoint `GET`
    * Version deployed: https://node-js.bonestealer.xyz/version
    * Healthcheck: https://node-js.bonestealer.xyz/healthz
@@ -48,22 +49,27 @@ Our CI/CD pipeline is strategically divided into two distinct workflows:
 2. Endpoint `POST`
    * Add operation
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d '{"num1": 3, "num2": 5}' https://node-js.bonestealer.xyz/api/add
+    $ curl -X POST -H "Content-Type: application/json" -d '{"num1": 3, "num2": 5}' https://node-js.bonestealer.xyz/api/add
+    {"result":8}
     ```
    * Subtract operation
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d '{"num1": 5, "num2": 10}' https://node-js.bonestealer.xyz/api/subtract
+    $ curl -X POST -H "Content-Type: application/json" -d '{"num1": 5, "num2": 10}' https://node-js.bonestealer.xyz/api/subtract
+    {"result":-5}     
     ```
    * Multipy operation
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d '{"num1": 5, "num2": 10}' https://node-js.bonestealer.xyz/api/multiply
+    $ curl -X POST -H "Content-Type: application/json" -d '{"num1": 5, "num2": 10}' https://node-js.bonestealer.xyz/api/multiply
+    {"result":50}
     ```
    * Divide operation 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d '{"num1": 10, "num2": 5}' https://node-js.bonestealer.xyz/api/divide
+    $ curl -X POST -H "Content-Type: application/json" -d '{"num1": 10, "num2": 5}' https://node-js.bonestealer.xyz/api/divide
+    {"result":2}
     ```
 
 #### Backend Golang
+##### Endpoints
 1. Endpoint `GET`
    * Version deployed: https://go.bonestealer.xyz/version
    * Healthcheck: https://go.bonestealer.xyz/healthz
@@ -72,19 +78,27 @@ Our CI/CD pipeline is strategically divided into two distinct workflows:
    * Add operation
     ```bash
     curl -X POST -H "Content-Type: application/json" -d '{"num1": 3, "num2": 5}' https://go.bonestealer.xyz/call-node-backend/add
+    {"result":8}
     ```
    * Subtract operation
     ```bash
     curl -X POST -H "Content-Type: application/json" -d '{"num1": 5, "num2": 10}' https://go.bonestealer.xyz/call-node-backend/subtract
+    {"result":-5}
     ```
    * Multipy operation
     ```bash
     curl -X POST -H "Content-Type: application/json" -d '{"num1": 5, "num2": 10}' https://go.bonestealer.xyz/call-node-backend/multiply
+    {"result":50}
     ```
    * Divide operation 
     ```bash
     curl -X POST -H "Content-Type: application/json" -d '{"num1": 10, "num2": 5}' https://go.bonestealer.xyz/call-node-backend/divide
+    {"result":2}
     ```
+##### Environment Variables
+   | General Variables                | Required? | Descriptions                                 | Default Value              | Type       |
+   |----------------------------------|-----------|----------------------------------------------|----------------------------|-------------
+   | BACKEND_NODE_URL                 | ✔         | Backend Node URL                             | https://go.bonestealer.xyz | Config     |
 
 ## Repo Directory Structure
 ```bash
