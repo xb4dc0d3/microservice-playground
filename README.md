@@ -33,7 +33,8 @@ Our CI/CD pipeline is strategically divided into two distinct workflows:
 
 ### Infrastructure
 1. Infra Manifests
-   - Setup `NGINX Ingress Controller` to expose the service to public, refer to the provided manifests [here](kubernetes/infra/ingress-nginx)
+   - Setup `NGINX Ingress Controller` to expose the service to the public, refer to the provided manifests [here](kubernetes/infra/ingress-nginx)
+   - For the TLS currently using Cerbot Let's Encrypt instead of CertManager, because there's no DNS01 challange provider for namecheap domain. List of supported DNS01 [provider](https://cert-manager.io/docs/configuration/acme/dns01/#supported-dns01-providers)
 2. Apps Manifests
    - Setup Ingress and Deployment for `backend-go` and `backend-node-js`, refer to the provided manifests [here](kubernetes/apps)
 
